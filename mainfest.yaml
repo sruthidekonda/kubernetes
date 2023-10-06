@@ -1,0 +1,75 @@
+apiVersion: v1
+kind: pod
+metadata:
+  name: mypod
+spec:
+  containers:
+  name:first-cont
+  image:httpd
+  ports:
+    -containerPort:80
+
+---
+apiVersion: v1
+kind: ReplicaSet
+metadata: 
+  name: myreplica
+  namespace: green
+spec:
+  replicas: 3
+  containers:
+    name: replica-cont
+    image: nginx
+    ports:
+      -containerPort: 80
+
+---
+apiVersion: v1
+kind: DaemonSet
+metadata: 
+  name:my-daemon
+  namespace: green
+  spec:
+    selector:
+      matchLabels:
+        app: podlabel
+    template:
+      metadata:
+        labels:
+          app: podlabel
+    spec:
+      containers:
+        name: daemon-sonar
+        image:sonarqube
+        ports:
+        -containerPort: 9000 		
+
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: my-depl
+  spec:
+    replicas:3
+    selector:
+      matchLabels:
+        app: dep
+    template:
+      metadata:
+	labels:
+          app: dep 
+    spec:
+      containers:
+        name: dep-cont
+        image: httpd
+        ports:
+        -containerPort: 80 
+  
+---
+apiVersion: v1
+kind: Service
+metadata:
+  type: clusterIP
+  name: my-one
+  
+
